@@ -137,12 +137,12 @@ for f in glob.glob("lyrics_train/*.txt"):
 
 with open('training_data.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        for row in trainingSet:
-            csvwriter.writerow(row)
+        #for row in trainingSet:
+        csvwriter.writerow(trainingSet)
         csvwriter.writerow(trainingAns)
 
 with open('testing_data.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        for row in testingSet:
-            csvwriter.writerow(row)
+        #for row in testingSet:
+        csvwriter.writerow(testingSet)
         csvwriter.writerow(testingAns)
