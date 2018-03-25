@@ -80,7 +80,7 @@ def titlePercentage(lyrics):
     title = lyrics[0].casefold()
     for line in lyrics:
         counter += line.casefold().count(title)
-    return (counter - 1) / float(countTotalWords(lyrics)) * 100
+    return ((counter - 1) * len(title.split(" "))) / float(countTotalWords(lyrics)) * 100
 
 
 def main(filename):
@@ -91,6 +91,7 @@ def main(filename):
     for x in fl:
         lyrics.append(x.replace('\n', ""))
     #print(lyrics)
+    output.append(filename)
     output.append(englishWordPercentage(lyrics))
     output.append(romanticWordPercentage(lyrics))
     output.append(badWordPercentage(lyrics))
