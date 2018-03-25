@@ -7,7 +7,7 @@ Given a set of lyrics, analyzes:
 - Average line length
 - % unique words
 - # Title occurrences in lyrics
-'''
+
 
 def countEnglishWords(...){
     ...
@@ -36,7 +36,12 @@ def uniqueWordsPercentage(){
 def countTitleOccurs(){
 
 }
+'''
+def main():
+    f= open("lyrics.txt", "r")
+    fl = f.readlines()
+    for x in fl:
+        print(x)
 
-def main(){
-
-}
+if __name__=="__main__":
+    main()
