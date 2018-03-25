@@ -1,3 +1,4 @@
+import unicodedata
 '''
 Given a set of lyrics, analyzes:
 - # English words
@@ -7,41 +8,57 @@ Given a set of lyrics, analyzes:
 - Average line length
 - % unique words
 - # Title occurrences in lyrics
-
-
-def countEnglishWords(...){
-    ...
-}
-
-def countTotalWords(){
-
-}
-
-def countObsceneWords(){
-
-}
-
-def countLines(){
-
-}
-
-def findAvgLineLength(){
-
-}
-
-def uniqueWordsPercentage(){
-
-}
-
-def countTitleOccurs(){
-
-}
 '''
+lyrics = [];
+
+def countEnglishWords():
+  counter = 0
+  for line in lyrics:
+  	for word in line.split(" "):
+  		if len(word) > 0 and (ord(str(word[0]))) <= 122:
+  			counter += 1
+  return counter
+
+def countTotalWords():
+	counter = 0
+	for line in lyrics:
+		for word in line.split(" "):
+			counter += len(word)
+	return counter
+
+#def countObsceneWords():
+
+def countLines():
+	return len(lyrics) - 1
+
+def findAvgLineLength():
+	return countTotalWords() / float(countLines())
+
+def uniqueWordsPercentage():
+	unique = []
+	for line in lyrics:
+		for word in line.split(" "):
+			if word not in unique:
+				unique.append(word)
+	return  float(len(unique)) / countTotalWords() * 100
+
+def countTitleOccurs():
+	counter = 0
+	title = lyrics[0].casefold()
+	for line in lyrics:
+		counter += line.casefold().count(title)
+	return counter - 1
+
 def main():
     f= open("lyrics.txt", "r")
     fl = f.readlines()
     for x in fl:
-        print(x)
-
-if __name__=="__main__":
-    main()
+        lyrics.append(x.replace('\n', ""))
+    #print(lyrics)
+    print(countEnglishWords())
+    print(countTotalWords())
+    print(countLines())
+    print(findAvgLineLength())
+    print(uniqueWordsPercentage())
+    print(countTitleOccurs())
+main()
