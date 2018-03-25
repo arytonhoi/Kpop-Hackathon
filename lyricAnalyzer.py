@@ -1,6 +1,7 @@
 import unicodedata
 import glob
 import csv
+import codecs
 
 '''
 Given a set of lyrics, analyzes:
@@ -9,7 +10,7 @@ Given a set of lyrics, analyzes:
 - obscene words
 - #lines
 - Average line length
-- % unique words
+- percent unique words
 - # Title occurrences in lyrics
 '''
 
@@ -37,7 +38,7 @@ def englishWordPercentage(lyrics):
 
 def countTotalWords(lyrics):
     counter = 0
-    print(lyrics)
+    #print(lyrics)
     for line in lyrics:
         if not len(line) == 0:
             counter += len(line.split(" "))
@@ -77,7 +78,7 @@ def uniqueWordsPercentage(lyrics):
 
 def titlePercentage(lyrics):
     counter = 0
-    title = lyrics[0].casefold()
+    title = lyrics[1].casefold()
     for line in lyrics:
         counter += line.casefold().count(title)
     return ((counter - 1) * len(title.split(" "))) / float(countTotalWords(lyrics)) * 100
@@ -85,29 +86,63 @@ def titlePercentage(lyrics):
 
 def main(filename):
     lyrics = []
-    output = []
-    f = open(filename, "r")
-    fl = f.readlines()
-    for x in fl:
-        lyrics.append(x.replace('\n', ""))
+    output_train = []
+    output_test = []
+    file = codecs.open(filename, "r")
+    fileline = file.readlines()
+    for line in fileline:
+        #print(line)
+        lyrics.append(line.replace('\n', ""))
     #print(lyrics)
-    output.append(filename)
-    output.append(englishWordPercentage(lyrics))
-    output.append(romanticWordPercentage(lyrics))
-    output.append(badWordPercentage(lyrics))
-    output.append(findAvgLineLength(lyrics))
-    output.append(uniqueWordsPercentage(lyrics))
-    output.append(titlePercentage(lyrics))
-    trainingSet.append(output)
-    #print(trainingSet)
+    if not which_file % 5 == 0:
+        output_train.append(englishWordPercentage(lyrics))
+        output_train.append(romanticWordPercentage(lyrics))
+        output_train.append(badWordPercentage(lyrics))
+        output_train.append(findAvgLineLength(lyrics))
+        output_train.append(uniqueWordsPercentage(lyrics))
+        output_train.append(titlePercentage(lyrics))
+        trainingSet.append(output_train)
+        #print(trainingSet)
+        if "twice" in filename:
+            trainingAns.append(0)
+        elif "BTS" in filename:
+            trainingAns.append(1)
+        elif "IU" in filename:
+            trainingAns.append(2)
+    else:
+        output_test.append(englishWordPercentage(lyrics))
+        output_test.append(romanticWordPercentage(lyrics))
+        output_test.append(badWordPercentage(lyrics))
+        output_test.append(findAvgLineLength(lyrics))
+        output_test.append(uniqueWordsPercentage(lyrics))
+        output_test.append(titlePercentage(lyrics))
+        testingSet.append(output_test)
+        #print(trainingSet)
+        if "twice" in filename:
+            testingAns.append(0)
+        elif "BTS" in filename:
+            testingAns.append(1)
+        elif "IU" in filename:
+            testingAns.append(2)
 
 trainingSet = []
+testingSet = []
+trainingAns = []
+testingAns = []
+which_file = 1
 
 for f in glob.glob("lyrics_train/*.txt"):
-    print("beep")
     main(f)
+    which_file += 1
 
-with open('trainning_data.csv', 'w', newline='') as csvfile:
+with open('training_data.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         for row in trainingSet:
             csvwriter.writerow(row)
+        csvwriter.writerow(trainingAns)
+
+with open('testing_data.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for row in testingSet:
+            csvwriter.writerow(row)
+        csvwriter.writerow(testingAns)
