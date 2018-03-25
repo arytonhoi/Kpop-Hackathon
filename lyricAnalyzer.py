@@ -47,6 +47,14 @@ def romanticWordPercentage():
                 counter += 1
     return counter / float(countTotalWords()) * 100
 
+def badWordPercentage():
+    counter = 0
+    for line in lyrics:
+        for word in line.split(" "):
+            if word in bad:
+                counter += 1
+    return counter / float(countTotalWords()) * 100
+
 def countLines():
     return len(lyrics) - 1
 
@@ -80,6 +88,7 @@ def main():
     # print(lyrics)
     output.append(englishWordPercentage())
     output.append(romanticWordPercentage())
+    output.append(badWordPercentage())
     output.append(findAvgLineLength())
     output.append(uniqueWordsPercentage())
     output.append(titlePercentage())
