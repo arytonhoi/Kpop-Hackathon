@@ -50,15 +50,18 @@ def countTitleOccurs():
 	return counter - 1
 
 def main():
-    f= open("lyrics.txt", "r")
-    fl = f.readlines()
-    for x in fl:
-        lyrics.append(x.replace('\n', ""))
-    #print(lyrics)
-    print(countEnglishWords())
-    print(countTotalWords())
-    print(countLines())
-    print(findAvgLineLength())
-    print(uniqueWordsPercentage())
-    print(countTitleOccurs())
+	final = []
+	f= open("lyrics.txt", "r")
+	fl = f.readlines()
+	for x in fl:
+		lyrics.append(x.replace('\n', ""))
+  #print(lyrics)
+  final.append(countEnglishWords())
+  final.append(countTotalWords())
+  final.append(countObsceneWords())
+  final.append(countLines())
+  final.append(findAvgLineLength())
+  final.append(uniqueWordsPercentage())
+  final.append(countTitleOccurs())
+  print(final)
 main()
