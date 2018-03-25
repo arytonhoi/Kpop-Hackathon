@@ -12,7 +12,9 @@ Given a set of lyrics, analyzes:
 '''
 lyrics = []
 
-bad = ['섹스', '성적', '그것을 하다', '바람피우다', '차다', '집적대다']
+bad = ['섹스', '성적', '그것을 하다', '바람피우다', '차다', '집적대다', 'sexy', 'enemy',\
+       'bad', 'girl', 'style', 'type', 'party', '오빠', '괜히', '남자', '미친',\
+       '여자는', '여자', '몸', '치게', '아파', '장난']
 
 romantic = ['사랑해요', '당신을 좋아해요', '별일 없지', '하고 싶어요', 'baby',\
             '하고 싶어', '친절하시군요', '주실래요', '결혼해', '당신과', '함께하고', \
@@ -31,13 +33,11 @@ def englishWordPercentage():
                 counter += 1
     return counter / float(countTotalWords()) * 100
 
-
 def countTotalWords():
     counter = 0
     for line in lyrics:
         counter += len(line.split(" "))
     return counter
-
 
 def romanticWordPercentage():
     counter = 0
@@ -49,7 +49,6 @@ def romanticWordPercentage():
 
 def countLines():
     return len(lyrics) - 1
-
 
 def findAvgLineLength():
     return countTotalWords() / float(countLines())
@@ -74,19 +73,16 @@ def titlePercentage():
 
 def main():
     output = []
-    f = open("lyrics3.txt", "r")
+    f = open("lyrics.txt", "r")
     fl = f.readlines()
     for x in fl:
         lyrics.append(x.replace('\n', ""))
     # print(lyrics)
     output.append(englishWordPercentage())
-    output.append(countTotalWords())
     output.append(romanticWordPercentage())
-    output.append(countLines())
     output.append(findAvgLineLength())
     output.append(uniqueWordsPercentage())
     output.append(titlePercentage())
     print(output)
-
 
 main()
