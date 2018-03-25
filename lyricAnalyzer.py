@@ -1,4 +1,6 @@
 import unicodedata
+import glob
+import csv
 
 '''
 Given a set of lyrics, analyzes:
@@ -10,7 +12,6 @@ Given a set of lyrics, analyzes:
 - % unique words
 - # Title occurrences in lyrics
 '''
-lyrics = []
 
 bad = ['섹스', '성적', '그것을 하다', '바람피우다', '차다', '집적대다', 'sexy', 'enemy',\
        'bad', 'girl', 'style', 'type', 'party', '오빠', '괜히', '남자', '미친',\
@@ -25,73 +26,85 @@ romantic = ['사랑해요', '당신을 좋아해요', '별일 없지', '하고 �
             '소개팅', '원나잇 스탠드', '뽀뽀', '키스', '사랑에', '첫사랑', '여보', \
             '반하다', '첫눈에', '있어줘', '화장', '자다']
 
-def englishWordPercentage():
+def englishWordPercentage(lyrics):
     counter = 0
     for line in lyrics:
         for word in line.split(" "):
             if len(word) > 0 and (ord(str(word[0]))) <= 122:
                 counter += 1
-    return counter / float(countTotalWords()) * 100
+    return counter / float(countTotalWords(lyrics)) * 100
 
-def countTotalWords():
+def countTotalWords(lyrics):
     counter = 0
+    print(lyrics)
     for line in lyrics:
         counter += len(line.split(" "))
     return counter
 
-def romanticWordPercentage():
+def romanticWordPercentage(lyrics):
     counter = 0
     for line in lyrics:
         for word in line.split(" "):
             if word in romantic:
                 counter += 1
-    return counter / float(countTotalWords()) * 100
+    return counter / float(countTotalWords(lyrics)) * 100
 
-def badWordPercentage():
+def badWordPercentage(lyrics):
     counter = 0
     for line in lyrics:
         for word in line.split(" "):
             if word in bad:
                 counter += 1
-    return counter / float(countTotalWords()) * 100
+    return counter / float(countTotalWords(lyrics)) * 100
 
-def countLines():
+def countLines(lyrics):
     return len(lyrics) - 1
 
-def findAvgLineLength():
-    return countTotalWords() / float(countLines())
+def findAvgLineLength(lyrics):
+    return countTotalWords(lyrics) / float(countLines(lyrics))
 
 
-def uniqueWordsPercentage():
+def uniqueWordsPercentage(lyrics):
     unique = []
     for line in lyrics:
         for word in line.split(" "):
             if word not in unique:
                 unique.append(word)
-    return float(len(unique)) / countTotalWords() * 100
+    return float(len(unique)) / countTotalWords(lyrics) * 100
 
 
-def titlePercentage():
+def titlePercentage(lyrics):
     counter = 0
     title = lyrics[0].casefold()
     for line in lyrics:
         counter += line.casefold().count(title)
-    return (counter - 1) / float(countTotalWords()) * 100
+    return (counter - 1) / float(countTotalWords(lyrics)) * 100
 
 
-def main():
+def main(filename):
+    lyrics = []
     output = []
-    f = open("lyrics.txt", "r")
+    f = open(filename, "r")
     fl = f.readlines()
     for x in fl:
         lyrics.append(x.replace('\n', ""))
-    # print(lyrics)
-    output.append(englishWordPercentage())
-    output.append(romanticWordPercentage())
-    output.append(badWordPercentage())
-    output.append(findAvgLineLength())
-    output.append(uniqueWordsPercentage())
-    output.append(titlePercentage())
-    print(output)
+    #print(lyrics)
+    output.append(englishWordPercentage(lyrics))
+    output.append(romanticWordPercentage(lyrics))
+    output.append(badWordPercentage(lyrics))
+    output.append(findAvgLineLength(lyrics))
+    output.append(uniqueWordsPercentage(lyrics))
+    output.append(titlePercentage(lyrics))
+    trainingSet.append(output)
+    #print(trainingSet)
 
-main()
+trainingSet = []
+
+for f in glob.glob("lyrics_train/*.txt"):
+    print("beep")
+    main(f)
+
+with open('trainning_data.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        for row in trainingSet:
+            csvwriter.writerow(row)
