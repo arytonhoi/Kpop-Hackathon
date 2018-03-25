@@ -38,7 +38,8 @@ def countTotalWords(lyrics):
     counter = 0
     print(lyrics)
     for line in lyrics:
-        counter += len(line.split(" "))
+        if not len(line) == 0:
+            counter += len(line.split(" "))
     return counter
 
 def romanticWordPercentage(lyrics):
