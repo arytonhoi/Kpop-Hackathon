@@ -101,14 +101,14 @@ def main(filename):
         output_train.append(findAvgLineLength(lyrics))
         output_train.append(uniqueWordsPercentage(lyrics))
         output_train.append(titlePercentage(lyrics))
-        trainingSet.append(output_train)
         #print(trainingSet)
         if "twice" in filename:
-            trainingAns.append(0)
+            output_train.append(0)
         elif "BTS" in filename:
-            trainingAns.append(1)
+            output_train.append(1)
         elif "IU" in filename:
-            trainingAns.append(2)
+            output_train.append(2)
+        trainingSet.append(output_train)
     else:
         output_test.append(englishWordPercentage(lyrics))
         output_test.append(romanticWordPercentage(lyrics))
@@ -116,19 +116,20 @@ def main(filename):
         output_test.append(findAvgLineLength(lyrics))
         output_test.append(uniqueWordsPercentage(lyrics))
         output_test.append(titlePercentage(lyrics))
-        testingSet.append(output_test)
         #print(trainingSet)
         if "twice" in filename:
-            testingAns.append(0)
+            output_test.append(0)
         elif "BTS" in filename:
-            testingAns.append(1)
+            output_test.append(1)
         elif "IU" in filename:
-            testingAns.append(2)
+            output_test.append(2)
+        testingSet.append(output_test)
+
+categories = ["twice", "BTS","IU"]
+numFeatures = 6
 
 trainingSet = []
 testingSet = []
-trainingAns = []
-testingAns = []
 which_file = 1
 
 for f in glob.glob("lyrics_train/*.txt"):
@@ -137,12 +138,18 @@ for f in glob.glob("lyrics_train/*.txt"):
 
 with open('training_data.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        #for row in trainingSet:
-        csvwriter.writerow(trainingSet)
-        csvwriter.writerow(trainingAns)
+        trainingHeader = [len(trainingSet), numFeatures]
+        for category in categories:
+            trainingHeader.append(category)
+        csvwriter.writerow(trainingHeader)
+        for row in trainingSet:
+            csvwriter.writerow(row)
 
 with open('testing_data.csv', 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        #for row in testingSet:
-        csvwriter.writerow(testingSet)
-        csvwriter.writerow(testingAns)
+        testingHeader = [len(testingSet), numFeatures]
+        for category in categories:
+            testingHeader.append(category)
+        csvwriter.writerow(testingHeader)
+        for row in testingSet:
+            csvwriter.writerow(row)
