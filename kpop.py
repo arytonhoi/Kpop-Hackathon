@@ -6,8 +6,8 @@ print(tf.__version__)
 from tensorflow.contrib.learn.python.learn.datasets import base
 
 # Data files
-KPOP_TRAINING = "kpop_training.csv"
-KPOP_TEST = "kpop_test.csv"
+KPOP_TRAINING = "training_data.csv"
+KPOP_TEST = "testing_data.csv"
 
 # Load datasets.
 training_set = base.load_csv_with_header(filename=KPOP_TRAINING,
@@ -24,7 +24,7 @@ feature_columns = [tf.feature_column.numeric_column(feature_name,
 classifier = tf.estimator.LinearClassifier(
     feature_columns=feature_columns,
     n_classes=3,
-    model_dir="/Documents/NUWireless/kpop_model")
+    model_dir=".lyrics_train")
 
 def input_fn(dataset):
     def _fn():
@@ -48,5 +48,5 @@ feature_spec = {'kpop_features': tf.FixedLenFeature(shape=[6], dtype=np.float32)
 
 serving_fn = tf.estimator.export.build_parsing_serving_input_receiver_fn(feature_spec)
 
-classifier.export_savedmodel(export_dir_base='/Documents/NUWireless' + '/export', 
+classifier.export_savedmodel(export_dir_base='./model_dir' + '/export',
                             serving_input_receiver_fn=serving_fn)
